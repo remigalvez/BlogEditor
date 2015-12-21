@@ -4,10 +4,10 @@ var pg = require('pg');
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
-  res.render('index', { title: 'Express' });
+  res.render('pages/index', { title: 'Express' });
 });
 
-router.get('/db', function (req, res) {
+router.get('/db', function (request, response) {
   pg.connect(process.env.DATABASE_URL, function(err, client, done) {
     client.query('SELECT * FROM test_table', function(err, result) {
       done();
@@ -17,6 +17,6 @@ router.get('/db', function (req, res) {
        { response.render('pages/db', {results: result.rows} ); }
     });
   });
-})
+});
 
 module.exports = router;
