@@ -41,7 +41,7 @@ app.use(function(req, res, next) {
 if (app.get('env') === 'development') {
   app.use(function(err, req, res, next) {
     res.status(err.status || 500);
-    res.render('error', {
+    res.render('pages/error', {
       message: err.message,
       error: err
     });
@@ -52,7 +52,7 @@ if (app.get('env') === 'development') {
 // no stacktraces leaked to user
 app.use(function(err, req, res, next) {
   res.status(err.status || 500);
-  res.render('error', {
+  res.render('pages/error', {
     message: err.message,
     error: {}
   });
@@ -61,6 +61,5 @@ app.use(function(err, req, res, next) {
 app.listen(app.get('port'), function() {
   console.log('Node app is running on port', app.get('port'));
 });
-
 
 module.exports = app;
