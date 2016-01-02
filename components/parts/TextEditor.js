@@ -1,7 +1,7 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
-var Display = require('./Display');
-var PopupWindow = require('./PopupWindow');
+var Display = require('./wrappers/Display');
+var PopupWindow = require('./wrappers/PopupWindow');
 
 var TextEditor = React.createClass({
 
@@ -29,14 +29,18 @@ var TextEditor = React.createClass({
 		el.focus();
 	}, 
 
+	largeText() { 
+		var el = ReactDOM.findDOMNode(this.refs.editor);
+		document.execCommand('fontSize', null, '24pt');
+		el.focus();
+	}, 
+
 	addImage() {
 		this.setState({ image: true });
-		console.log('State set.');
-		// document.addEventListener('click', function(e) {
-		// 	var el = document.getElementById('iframe');
-		// 	console.log(el === e.srcElement);
-		//     console.log(e.srcElement);
-		// }, false);
+	},
+
+	deactivateImagePopup() {
+		this.setState({ image: false });
 	},
 
 	render() {
@@ -45,19 +49,20 @@ var TextEditor = React.createClass({
 				
 				<div ref="editor"
 					 contentEditable="true"
+					 className="message"
 					 style={{minHeight:"50px", width:"100%", border: "1px solid #ccc"}}>
 				</div>
 
 				<button onClick={this.boldify}><b>Bold</b></button>
 				<button onClick={this.italicize}><i>Italic</i></button>
 				<button onClick={this.underline}><u>Underline</u></button>
+				<button onClick={this.largeText}><span style={{fontSize: '24pt'}}>Large text</span></button>
 				<button onClick={this.addImage}>Image</button>
 
 				<Display if={this.state.image}>
-					<PopupWindow>
+					<PopupWindow deactivate={this.deactivateImagePopup}>
 						<div>
-							<h1>Hi friends!</h1>
-							<input placeholder="Hey ma!" />
+							<h1>Hello!</h1>
 						</div>
 					</PopupWindow>
 				</Display>

@@ -1,6 +1,6 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
-var Display = require('./Display');
+var Display = require('./wrappers/Display');
 
 var FeedEditor = React.createClass({
 

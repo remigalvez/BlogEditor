@@ -1,7 +1,7 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
 var CommentContainer = require('./CommentContainer');
-var Display = require('./Display');
+var Display = require('./wrappers/Display');
 var autosize = require('autosize');
 
 var ta;

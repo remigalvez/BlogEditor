@@ -1,7 +1,7 @@
 var React = require('react');
 var Comment = require('./Comment');
 var CommentEditor = require('./CommentEditor');
-var Display = require('./Display');
+var Display = require('./wrappers/Display');
 
 var CommentContainer = React.createClass({
 
