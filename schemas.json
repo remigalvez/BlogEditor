@@ -1,0 +1,19 @@
+feed: {
+	id: serial,
+	title: varchar,
+	message: text,
+	vote_up: int,
+	vote_down: int,
+	timestamp: timestamp
+},
+
+comment: {
+	id: serial,
+	user_id: int,
+	user_name: varchar,
+	feed_id: int,
+	comment: text,
+	vote_up: int,
+	vote_down: int, 
+	timestamp: timestamp
+}

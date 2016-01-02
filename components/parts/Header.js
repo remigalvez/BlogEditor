@@ -4,7 +4,7 @@ var Header = React.createClass({
 	render() {
 		return (
 			<div className="container">
-				<h1>A Privileged Vegan: {this.props.connected}</h1>
+				<h1>A Privileged Vegan</h1>
 			</div>
 		);
 	}

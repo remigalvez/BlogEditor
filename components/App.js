@@ -1,4 +1,5 @@
 var React = require('react');
+var ReactDOM = require('react-dom');
 var io = require('socket.io-client');
 
 // Define app components
@@ -12,7 +13,8 @@ var App = React.createClass({
 			connected: false,
 			admin: true,
 			title: '',
-			feeds: []
+			feeds: [],
+			comments: []
 		};
 	},
 
@@ -21,7 +23,9 @@ var App = React.createClass({
 		this.socket = io('http://localhost:5000/');
 		this.socket.on('connect', this.connect);
 		this.socket.on('initial', this.initial);
-		this.socket.on('post', this.updateFeed);
+		this.socket.on('update-feed', this.updateFeed);
+		this.socket.on('get-comments', this.updateComments);
+		this.socket.on('publish-comment', this.updateComments);
 	},
 
 	emit(eventName, payload) {
@@ -38,6 +42,15 @@ var App = React.createClass({
 
 	updateFeed(payload) {
 		this.setState({ feeds: payload });
+	},
+
+	updateComments(payload) {
+		var comments = this.state.comments;
+		// Push new comments to comments props
+		payload.comments.forEach(function (comment) {
+			comments.push(comment);
+		});
+		this.setState({ comments: comments });
 	},
 
 	render() {

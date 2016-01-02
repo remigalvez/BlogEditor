@@ -9,6 +9,7 @@
   "author": "Remi Galvez",
   "license": "MIT",
   "dependencies": {
+    "autosize": "^3.0.14",
     "babel-core": "^6.3.26",
     "babel-loader": "^6.2.0",
     "babel-preset-es2015": "^6.3.13",
@@ -16,7 +17,9 @@
     "bootstrap": "^3.3.6",
     "express": "^4.13.3",
     "history": "^1.17.0",
+    "moment": "^2.10.6",
     "path": "^0.12.7",
+    "pg": "^4.4.3",
     "react": "^0.14.3",
     "react-dom": "^0.14.3",
     "react-router": "^1.0.3",

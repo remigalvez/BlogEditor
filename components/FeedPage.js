@@ -1,20 +1,19 @@
 var React = require('react');
 // Initialize app components
 var Display = require('./parts/Display');
-var Editor = require('./Editor');
-var Feed = require('./Feed');
+var FeedEditor = require('./parts/FeedEditor');
+var Feed = require('./parts/Feed');
 
 
 var FeedPage = React.createClass({
- 
 	render() {
 		return (
 			<div>
 				<Display if={this.props.admin}>
-					<Editor emit={this.props.emit} />
+					<FeedEditor emit={this.props.emit} />
 				</Display>
 
-				<Feed feeds={this.props.feeds} />
+				<Feed {...this.props} />
 			</div>
 		);
 	}
