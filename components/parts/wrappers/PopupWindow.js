@@ -71,7 +71,7 @@ var PopupWindow = React.createClass({
 			el = el.parentElement ;
 		}
 		// Deactivate popup window if click is outside window
-		this.props.deactivate();
+		this.props.close();
 	},
 
 	render() {
