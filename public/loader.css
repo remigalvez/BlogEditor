@@ -1,0 +1,174 @@
+#loader-1 {
+	display: inline-block;
+	width: 100px;
+	height: 100px;
+	margin: 20px;
+	border-radius: 5px;
+	background-color: #00B8FF;
+	animation: loader-1 1.5s infinite linear;
+}
+
+@keyframes loader-1 {
+	10% {
+		transform: rotate(0deg);
+		margin-top: 20px;
+		border-radius: 5px;
+	}
+
+	60% {
+		transform: rotate(0deg);
+		margin-top: 20px;
+		border-radius: 5px;
+	}
+
+	80% {
+		transform: rotate(45deg);
+		margin-top: 25px;
+		border-radius: 5px 5px 50px 5px;
+	}
+
+	100% {
+		transform: rotate(90deg);
+		margin-top: 20px;
+		border-radius: 5px;
+	}
+}
+
+
+
+
+#loader-2 {
+	display: inline-block;
+	width: 200px;
+	height: 20px;
+	border-radius: 20px;
+	background-color: #00B8FF;
+	animation: loader-2 2s infinite ease-in-out;
+}
+
+@keyframes loader-2 {
+	0% {
+		width: 200px;
+		height: 20px;
+	}
+
+	30% {
+		width: 200px;
+		height: 20px;
+		transform: translateX(0px);
+	}
+
+	40% {
+		width: 20px;
+		height: 200px;
+		transform: translateX(90px);
+	}
+
+	50% {
+		width: 20px;
+		height: 220px;
+		transform: translateX(90px);
+	}
+
+	90% {
+		width: 20px;
+		height: 200px;
+		transform: translateX(90px);
+	}
+
+	100% {
+		width: 200px;
+		height: 20px;
+	}
+}
+
+
+#loader-3 {
+	position: fixed;
+	margin: 50px;
+	height: 50px;
+}
+
+#loader-3 span {
+	display: inline-block;
+	margin-right: 2px;
+	margin-top: 40px;
+	width: 30px;
+	height: 10px;
+}
+
+#loader-3 span:nth-child(1) {
+	background-color: rgba(0, 200, 255, 1);
+	animation: loader-3 2s infinite ease-in-out;
+}
+
+#loader-3 span:nth-child(2) {
+	background-color: rgba(0, 200, 255, 0.9);
+	animation: loader-3 2s infinite ease-in-out;
+	animation-delay: 0.1s;
+}
+
+#loader-3 span:nth-child(3) {
+	background-color: rgba(0, 200, 255, 0.8);
+	animation: loader-3 2s infinite ease-in-out;
+	animation-delay: 0.2s;
+}
+
+#loader-3 span:nth-child(4) {
+	background-color: rgba(0, 200, 255, 0.7);
+	animation: loader-3 2s infinite ease-in-out;
+	animation-delay: 0.3s;
+}
+
+#loader-3 span:nth-child(5) {
+	background-color: rgba(0, 200, 255, 0.6);
+	animation: loader-3 2s infinite ease-in-out;
+	animation-delay: 0.4s;
+}
+
+#loader-3 span:nth-child(6) {
+	background-color: rgba(0, 200, 255, 0.5);
+	opacity: 0.7;
+	animation: loader-3 2s infinite ease-in-out;
+	animation-delay: 0.5s;
+}
+
+#loader-3 span:nth-child(7) {
+	background-color: rgba(0, 200, 255, 0.4);
+	animation: loader-3 2s infinite ease-in-out;
+	animation-delay: 0.6s;
+}
+
+@keyframes loader-3 {
+	0% {
+		height: 10px;
+		margin-top: 40px;
+	}
+
+	25% {
+		height: 50px;
+		margin-top: 0;
+	}
+
+	50% {
+		height: 10px;
+		margin-top: 40px;
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,5 +1,58 @@
-.popup {
-	position: fixed;
-	left: 100px;
-	top: 100px;
+*:focus {
+	outline: 0;
+}
+
+.message {
+	min-height: 200px;
+	border: 1px solid #CCC;
+	border-radius: 5px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	padding: 5px;
+}
+
+.message:focus {
+	transition: border 0.2s, box-shadow 0.2s;
+	border: 1px solid #63AEEB;
+	box-shadow: 0 0 3px #63AEEB;
+}
+
+.tagEditor {
+	width: 100%;
+	height: auto;
+	border: 1px solid #CCC;
+	border-radius: 5px;
+	padding: 5px;
+	margin-top: 5px;
+}
+
+.tag {
+	width: auto;
+	height: auto;
+	display: inline-block;
+	background-color: #EEEEEE;
+	border: 1px solid black;
+	border-radius: 2px;
+	margin: 2px;
+	padding: 1px 5px 1px 5px;
+}
+
+.hiddenInput {
+	border: none;
+	display: inline-block;
+	width: auto;
+}
+
+.feedContent {
+	padding: 15px 0 15px 0;
+}
+
+.active {
+	background-color: white;
+}
+
+.focus {
+	transition: border 0.2s, box-shadow 0.2s;
+	border: 1px solid #63AEEB;
+	box-shadow: 0 0 3px #63AEEB;
 }

@@ -76,7 +76,16 @@ var PopupWindow = React.createClass({
 
 	render() {
 		return (
-			<div style={this.state.style} id="c" className="popup">{this.props.children}</div>
+			<div style={{
+				position:"fixed",
+				left: "0",
+				top: "0",
+				height: "100%",
+				width: "100%",
+				backgroundColor: "rgba(255, 255, 255, 0.7)",
+			}}>
+				<div style={this.state.style} id="c" className="popup">{this.props.children}</div>
+			</div>
 		);
 	}
 });

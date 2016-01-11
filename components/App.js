@@ -13,8 +13,10 @@ var App = React.createClass({
 			connected: false,
 			admin: true,
 			title: '',
+			tags: [],
 			feeds: [],
-			comments: []
+			comments: [],
+			activeComments: []
 		};
 	},
 
@@ -23,9 +25,9 @@ var App = React.createClass({
 		this.socket = io('http://localhost:5000/');
 		this.socket.on('connect', this.connect);
 		this.socket.on('initial', this.initial);
-		this.socket.on('update-feed', this.updateFeed);
-		this.socket.on('get-comments', this.updateComments);
-		this.socket.on('publish-comment', this.updateComments);
+		this.socket.on('get-comments', this.getComments);
+		this.socket.on('publish-comment', this.onCommentPublished);
+		this.socket.on('update-state', this.updateState);
 	},
 
 	emit(eventName, payload) {
@@ -40,17 +42,28 @@ var App = React.createClass({
 		this.setState(payload);
 	},
 
-	updateFeed(payload) {
-		this.setState({ feeds: payload });
+	updateState(payload) {
+		this.setState(payload);
 	},
 
-	updateComments(payload) {
+	getComments(payload) {
 		var comments = this.state.comments;
+		if (this.state.activeComments.indexOf(payload.feed_id) < 0) {
+			this.state.activeComments.push(payload.feed_id);
+		}
 		// Push new comments to comments props
 		payload.comments.forEach(function (comment) {
 			comments.push(comment);
 		});
 		this.setState({ comments: comments });
+	},
+
+	onCommentPublished(payload) {
+		if (this.state.activeComments.indexOf(payload.feed_id) >= 0) {
+			var comments = this.state.comments;
+			comments.push(payload.comment);
+			this.setState({ comments: comments });
+		}
 	},
 
 	render() {

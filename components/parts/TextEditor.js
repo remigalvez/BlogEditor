@@ -9,6 +9,7 @@ var TextEditor = React.createClass({
 		return {
 			image: false,
 			link: false,
+			video: false,
 			feed: {
 				message: ''
 			},
@@ -22,26 +23,15 @@ var TextEditor = React.createClass({
 	},
 
 	componentWillReceiveProps(nextProps) {
-		if (nextProps.submit) {
+		if (nextProps.submit && !nextProps.received) {
 			var message = this.state.editor.innerHTML;
 			this.props.sendInnerHTML(message, this.state.editor);
 		}
 	},
 
-	boldify() { 
-		document.execCommand('bold');
-		this.state.editor.focus();
-	}, 
-	
-	italicize() { 
-		document.execCommand('italic');
-		this.state.editor.focus();
-	}, 
-	
-	underline() { 
-		document.execCommand('underline');
-		this.state.editor.focus();
-	}, 
+	boldify() { document.execCommand('bold'); this.state.editor.focus(); }, 
+	italicize() { document.execCommand('italic'); this.state.editor.focus(); }, 
+	underline() { document.execCommand('underline'); this.state.editor.focus(); }, 
 
 	decreaseFontSize() { 
 		if (this.state.fontSize < 1) {
@@ -71,18 +61,10 @@ var TextEditor = React.createClass({
 		var imageSize = this.refs.imgSz.imageSize.value;
 		var size;
 		switch (imageSize) {
-			case 'small':
-				size = '33%';
-				break;
-			case 'medium':
-				size = '67%';
-				break;
-			case 'large':
-				size = '100%';
-				break;
-			default:
-				size = '50%';
-				break;
+			case 'small': size = '33%'; break;
+			case 'medium': size = '67%'; break;
+			case 'large': size = '100%'; break;
+			default: size = '50%'; break;
 		}
 		var text = this.state.editor.innerHTML;
 		var url = ReactDOM.findDOMNode(this.refs.imageUrl).value.trim();
@@ -103,12 +85,36 @@ var TextEditor = React.createClass({
 		var htmlText = this.state.editor.innerHTML;
 		var url = ReactDOM.findDOMNode(this.refs.linkUrl).value;
 		var text = ReactDOM.findDOMNode(this.refs.linkText).value;
-		this.state.editor.innerHTML = htmlText + '<a href="' + url + '">' + text + '</a>';
+		this.state.editor.innerHTML = htmlText + 
+									  '<a href="' + url + '">' + text + '</a>';
 		this.closeLinkPopup();
 	},
 
 	closeLinkPopup() {
 		this.setState({ link: false });
+	},
+
+	showVideoPopup() {
+		this.setState({ video: true });
+	},
+
+	addVideo() {
+		var width = 640;
+		var height = 480;
+
+		var text = this.state.editor.innerHTML;
+		var urlInput = ReactDOM.findDOMNode(this.refs.videoUrl).value.trim();
+		if (urlInput === '') return;
+
+		var youtubeId = urlInput.split('v=')[1];
+		var url = 'http://www.youtube.com/embed/' + youtubeId;
+
+		this.state.editor.innerHTML = text + '<iframe src="' + url + '" width=' + width + ' height=' + height + ' allowfullscreen="allowfullscreen" mozallowfullscreen="mozallowfullscreen" msallowfullscreen="msallowfullscreen" oallowfullscreen="oallowfullscreen" webkitallowfullscreen="webkitallowfullscreen" />';
+		this.closeVideoPopup();
+	},
+
+	closeVideoPopup() {
+		this.setState({ video: false });
 	},
 
 	render() {
@@ -128,51 +134,36 @@ var TextEditor = React.createClass({
 				<button onClick={this.increaseFontSize}><span style={{fontSize: '14pt'}}>Larger</span></button>
 				<button onClick={this.showImagePopup}>Image</button>
 				<button onClick={this.showLinkPopup}>Link</button>
+				<button onClick={this.showVideoPopup}>Video</button>
 
 				<Display if={this.state.image}>
-					<div style={{
-									position:"fixed",
-									left: "0",
-									top: "0",
-									height: "100%",
-									width: "100%",
-									backgroundColor: "rgba(255, 255, 255, 0.7)",
-								}}>
-						<PopupWindow width="60%" height="40%" close={this.closeImagePopup}>
-							<div>
-								<h1>Add Image</h1>
-								<p>Image url:</p>
-								<input ref="imageUrl"
-									   className="form-control" />
-								
-								<form ref="imgSz">
-									<div className="radio-inline">
-										<label htmlFor="small">
-										<input type="radio" name="imageSize" id="small" value="small" />
-										Small
-										</label>
-									</div>
+					
+					<PopupWindow width="60%" height="40%" close={this.closeImagePopup}>
+						<div>
+							<h1>Add Image</h1>
+							<p>Image url:</p>
+							<input ref="imageUrl"
+								   className="form-control" />
+							
+							<form ref="imgSz">
+								<div className="radio-inline">
+									<label htmlFor="small"><input type="radio" name="imageSize" id="small" value="small" />Small</label>
+								</div>
 
-									<div className="radio-inline">
-										<label htmlFor="medium" className="**active**">
-											<input type="radio" name="imageSize" id="medium" value="medium" />
-											Medium
-										</label>
-									</div>
+								<div className="radio-inline">
+									<label htmlFor="medium" className="**active**"><input type="radio" name="imageSize" id="medium" value="medium" />Medium</label>
+								</div>
 
-									<div className="radio-inline">
-										<label htmlFor="large">
-											<input type="radio" name="imageSize" id="large" value="large" />
-											Large
-										</label>
-									</div>
-								</form>
+								<div className="radio-inline">
+									<label htmlFor="large"><input type="radio" name="imageSize" id="large" value="large" />Large</label>
+								</div>
+							</form>
 
-								<button className="btn btn-success" onClick={this.addImage}>Add</button>
-								<button className="btn btn-danger" onClick={this.closeImagePopup}>Cancel</button>
-							</div>
-						</PopupWindow>
-					</div>
+							<button className="btn btn-success" onClick={this.addImage}>Add</button>
+							<button className="btn btn-danger" onClick={this.closeImagePopup}>Cancel</button>
+						</div>
+					</PopupWindow>
+				
 				</Display>
 
 				<Display if={this.state.link}>
@@ -187,6 +178,20 @@ var TextEditor = React.createClass({
 								   className="form-control" />
 							<button className="btn btn-success" onClick={this.addLink}>Add</button>
 							<button className="btn btn-danger" onClick={this.closeLinkPopup}>Cancel</button>
+						</div>
+					</PopupWindow>
+				</Display>
+
+				<Display if={this.state.video}>
+					<PopupWindow close={this.closeVideoPopup}>
+						<div>
+							<h1>Add Video</h1>
+							<p>Video url:</p>
+							<input ref="videoUrl"
+								   className="form-control" />
+
+							<button className="btn btn-success" onClick={this.addVideo}>Add</button>
+							<button className="btn btn-danger" onClick={this.closeVideoPopup}>Cancel</button>
 						</div>
 					</PopupWindow>
 				</Display>

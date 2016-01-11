@@ -2,14 +2,18 @@ var express = require('express');
 var path = require('path');
 var app = express();
 var port = 5000;
-var db = require('./db');
+var db = require('./db/db');
 
 var moment = require('moment');
-
+// Store all feeds
 var feeds = [];
-
 db.getFeeds(function (data) {
 	feeds = data;
+});
+// Store all tags with count
+var tags = [];
+db.getTags(function (data) {
+	tags = data;
 });
 
 app.use(express.static(path.join(__dirname, 'public')));
@@ -22,28 +26,29 @@ io.sockets.on('connection', function (socket) {
 
 	// Initial call to setup the app
 	socket.emit('initial', {
-		feeds: feeds
+		feeds: feeds,
+		tags: tags
 	});
 
 	// Call to publish feed
 	socket.on('publish-feed', function (payload) {
-		// Send payload to database
 		payload.timestamp = moment().format();
 		payload.vote_up = 0;
 		payload.vote_down = 0; 
-		console.log('Feed posted: %j', payload);
 
 		db.pushFeed(payload, function (id) {
 			payload.id = id;
-			feeds.push(payload);
-			io.sockets.emit('update-feed', feeds);
+			broadcastState();
 		});
 	});
 
 	// Call to get comments
 	socket.on('get-comments', function (payload) {
 		db.getComments(payload.key, function (comments) {
-			socket.emit('get-comments', { comments: comments });
+			socket.emit('get-comments', { 
+				feed_id: payload.key, 
+				comments: comments 
+			});
 		});
 	});
 
@@ -54,35 +59,67 @@ io.sockets.on('connection', function (socket) {
 		payload.vote_down = 0;
 
 		db.pushComment(payload, function (id) {
-			// TODO: notify all clients of change
 			payload.id = id;
-			socket.emit('publish-comment', { comments: [payload] });
+			io.sockets.emit('publish-comment', { 
+				feed_id: payload.feed_id,
+				comment: payload
+			});
 		});
 	});
 
 	// Call to delete feed and feed comments
 	socket.on('delete-feed', function (payload) {
 		db.deleteFeed(payload.id, function () {
-			// Call to get all feeds
-			broadcastFeeds();
+			broadcastState();
 		});
 	});
 
 	// Call to edit feed
 	socket.on('edit-feed', function (payload) {
 		db.editFeed(payload, function () {
-			// Call to get all feeds
-			broadcastFeeds();
+			broadcastState();
+		});
+	});
+
+	// Call to create user
+	socket.on('create-user', function (payload) {
+		db.createUser(payload, function (user) {
+			console.log(user);
 		});
 	});
 
 });
 
-var broadcastFeeds = function () {
+var broadcastState = function () {
+	updateState(function () {
+		console.log(feeds);
+		io.sockets.emit('update-state', {
+			tags: tags, 
+			feeds: feeds,
+		});
+	});
+};
+
+var updateState = function (callback) {
+	updateFeeds(function () {
+		updateTags(function () {
+			callback();
+		});
+	});	
+};
+
+var updateFeeds = function (callback) {
 	db.getFeeds(function (data) {
 		feeds = data;
-		io.sockets.emit('update-feed', feeds);
+		callback();
 	});
-}
+};
+
+var updateTags = function (callback) {
+	db.getTags(function (data) {
+		tags = data;
+		callback();
+	});
+};
 
 console.log('Server running on port %d', port);

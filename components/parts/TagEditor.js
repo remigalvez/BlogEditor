@@ -10,15 +10,15 @@ var TagEditor = React.createClass({
 	},
 
 	componentDidMount() {
-		console.log('Component did mount.');
 		if (this.props.feed) {
-			console.log('Feed found.');
 			this.setState({ tags: this.props.feed.tags });
 		}
+
+		window.addEventListener('click', this.evaluateClick);
 	},
 
 	componentWillReceiveProps(nextProps) {
-		if (nextProps.submit) {
+		if (nextProps.submit && !nextProps.received) {
 			var tags = this.state.tags;
 			this.props.sendTags(tags, this.state.editor);
 			this.setState({ tags: [] });
@@ -27,15 +27,13 @@ var TagEditor = React.createClass({
 
 	renderTag(tag) {
 		return (
-			<div key={tag}
-				 className="editTag">
+			<div key={tag} className="tag">
 				{tag}
 			</div>
 		);
 	},
 
 	keyListener(e) {
-		// Space key
 		switch (e.keyCode) {
 			// Space key
 			case 32:
@@ -66,16 +64,35 @@ var TagEditor = React.createClass({
 		}
 	},
 
+	// Evaluate if click is within or without popup window
+	evaluateClick(e) {
+		var el = e.target || e.srcElement;
+		var tagContainer = this.refs.tagContainer;
+
+		if (tagContainer) {
+			if (el == tagContainer || el.parentElement == tagContainer) {
+				this.refs.editor.focus();
+				tagContainer.classList.add('focus');
+			} else {
+				tagContainer.classList.remove('focus');
+			}
+		}
+	},
+
 	render() {
 		return (
-			<div className="tagEditor"
+			<div ref="tagContainer"
+				 id="tagContainer"
+				 className="tagEditor"
 				 onKeyUp={this.keyListener}>
+
 				 {this.state.tags.map(this.renderTag)}
+				 
 				 <input ref="editor"
 				 		className="hiddenInput"
-				 		placeholder="Add tag"
-				 		autofocus />
-				 </div>
+				 		placeholder="Add tag" />
+
+			</div>
 		);
 	}
 });
