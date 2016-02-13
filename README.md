@@ -2,6 +2,7 @@
 Blog editor webapp for YouTube channel "A Privileged Vegan". Includes image and video compatibility, text-styling, and user-friendly interface.
 
 All written in ReactJS. 
+
 ReactJS Documentation: https://facebook.github.io/react/docs/getting-started.html 
 
 ## Testing environment
