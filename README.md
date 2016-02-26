@@ -13,3 +13,11 @@ Setup PostgreSQL database using SQL statements in ''Models'' directory. File ''1
 
 ### Technologies
 Node – Express – PostgreSQL – React
+
+### Organization
+
+All React HTML elements are in the "components" directory.
+All database functions are in the "db" directory.
+All database scripts are in the "models" directory.
+
+"client.js" calls all React files, and is bundled into the public directory, in a file called "bundle.js".
